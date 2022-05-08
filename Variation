@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+
+namespace variation
+{
+    class Program
+    {
+        static void Perm(int k, int[] el, List<int> p)
+        {
+            foreach (int a in el)
+            {
+                if (p.Count<=k)
+                {
+                    List<int> p2 = p;
+                    p2.Add(a);
+                    if (p.Count==k) Console.WriteLine(string.Join(' ', p2));
+                    else
+                    {
+                        int[] el2 = new int[el.Length - 1];
+                        int i = 0;
+                        foreach (int f in el) if (f != a) { el2[i] = f; i++; }
+                        Perm(k, el2, p2);
+                    }
+                    p2.RemoveAt(p2.Count - 1);
+                }
+                else break;
+            }
+        }
+        static void Main(string[] args)
+        {
+            int[] line = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            check:
+            int k = int.Parse(Console.ReadLine());
+            if (k < 1 || k > 10) { Console.WriteLine("K is between 1 and 10"); goto check; }
+            Perm(k, line, new List<int>());
+            Console.ReadKey(true);
+        }
+    }
+}
