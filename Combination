@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Combinatorics
+{
+    class Program
+    {
+        static int br = 1;
+
+        static void Perm(int k, List<int> el, List<int> p)
+        {
+            for (int broj1 = 0; broj1 < el.Count; broj1++)
+            {
+                if (p.Count <= k)
+                {
+                    List<int> p2 = p;
+                    p2.Add(el[broj1]);
+                    if (p.Count == k) { Console.Write(br + ". "); Console.Write(string.Join(" ", p2)); Console.WriteLine(); br++; }
+                    else
+                    {
+                        List<int> el2 = new List<int>();
+                        for (int broj2 = 0; broj2 < el.Count; broj2++) if (broj1 < broj2) { el2.Add(el[broj2]); }
+                        Perm(k, el2, p2);
+                    }
+                    p2.RemoveAt(p2.Count - 1);
+                }
+                else break;
+            }
+        }
+        static void Main(string[] args)
+        {
+            List<int> line = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        check:
+            int k = int.Parse(Console.ReadLine());
+            if (k < 1 || k > line.Count) { Console.WriteLine($"K is between 1 and {line.Count}"); goto check; }
+            Perm(k, line, new List<int>());
+            Console.ReadKey(true);
+        }
+    }
+}
