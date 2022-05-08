@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace perm
+{
+    class Program
+    {
+        static void Perm(string[] el, List<string> p)
+        {
+            foreach(string a in el)
+            {
+                List<string> p2 = p;
+                p2.Add(a);
+                if (el.Length == 1) Console.WriteLine(string.Join(' ', p2));
+                else
+                {
+                    string[] el2 = new string[el.Length - 1];
+                    int i = 0;
+                    foreach (string f in el) if (f != a) { el2[i] = f; i++; }
+                    Perm(el2, p2);
+                }
+                p2.RemoveAt(p2.Count - 1);
+            }
+        }
+        static void Main(string[] args)
+        {
+            var linee = Console.ReadLine().Split(' ').ToList();
+            linee = linee.Distinct().ToList();
+            var line = linee.ToArray();
+            Perm(line, new List<string>());
+            Console.ReadKey(true);
+        }
+    }
+}
