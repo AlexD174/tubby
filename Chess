@@ -1,0 +1,96 @@
+    class Program
+    {
+        static string otg = "";
+        static void Mest(int clm, int[] rows, int [,] board, int turns, int T)
+        {
+            int row = rows[clm];
+            if (board[row, clm] == 0)
+            {
+                int[,] boardCopy = new int[8, 8];
+                for (int i = 0; i < 8; i++)
+                    for (int q = 0; q < 8; q++)
+                        boardCopy[i, q] = board[i, q];
+                boardCopy[row, clm] = 1;
+                for (int p = 0; p < 8; p++)
+                {
+                    boardCopy[p, clm] = 1;
+                    boardCopy[row, p] = 1;
+                }
+                int rowX = row, clmX = clm;
+                while (rowX >= 0 && clmX >= 0) { boardCopy[rowX, clmX] = 1; rowX--; clmX--; }
+                rowX = row; clmX = clm;
+                while (rowX >= 0 && clmX < 8) { boardCopy[rowX, clmX] = 1; rowX--; clmX++; }
+                rowX = row; clmX = clm;
+                while (rowX < 8 && clmX < 8) { boardCopy[rowX, clmX] = 1; rowX++; clmX++; }
+                rowX = row; clmX = clm;
+                while (rowX < 8 && clmX >= 0) { boardCopy[rowX, clmX] = 1; rowX++; clmX--; }
+                if (clm < 7)
+                {
+                    clm++;
+                    Mest(clm, rows, boardCopy, turns, T);
+                }
+                else if(otg.Length <= T) otg = otg + "" + turns.ToString();
+            }
+            else
+            {
+                for (int f = 0; f < 8; f++)
+                {
+                    if (board[f, clm] == 0)
+                    {
+                        int[,] boardCopy = new int[8, 8];
+                        for (int i = 0; i < 8; i++)
+                            for (int q = 0; q < 8; q++)
+                                boardCopy[i, q] = board[i, q];
+                        boardCopy[f, clm] = 1;
+                        for (int p = 0; p < 8; p++)
+                        {
+                            boardCopy[p, clm] = 1;
+                            boardCopy[f, p] = 1;
+                        }
+                        int rowX = f, clmX = clm;
+                        while (rowX >= 0 && clmX >= 0) { boardCopy[rowX, clmX] = 1; rowX--; clmX--; }
+                        rowX = f; clmX = clm;
+                        while (rowX >= 0 && clmX < 8) { boardCopy[rowX, clmX] = 1; rowX--; clmX++; }
+                        rowX = f; clmX = clm;
+                        while (rowX < 8 && clmX < 8) { boardCopy[rowX, clmX] = 1; rowX++; clmX++; }
+                        rowX = f; clmX = clm;
+                        while (rowX < 8 && clmX >= 0) { boardCopy[rowX, clmX] = 1; rowX++; clmX--; }
+                        if (clm < 7)
+                        {
+                            turns++;
+                            clm++;
+                            Mest(clm, rows, boardCopy, turns, T);
+                            clm--;
+                            turns--;
+                        }
+                        else
+                        {
+                            turns++;
+                            if (otg.Length <= T) otg = otg + "" + turns.ToString();
+                        }
+                    }
+                }
+            }
+        }
+        static void Main(string[] args)
+        {
+            var line = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
+            for (int i = 1; i < line.Length; i++)
+                line[i]--;
+            for(int i = 0; i < line[0]; i++)
+            {
+                int turns = 0;
+                int[,] f = new int[8, 8];
+                for (int q = 0; q < 8; q++)
+                    for (int p = 0; p < 8; p++)
+                        f[q, p] = 0;
+                int[] rows = new int[8];
+                for (int q = 0; q < 8; q++)
+                    rows[q] = line[1 + q + 8 * i];
+                Mest(0, rows, f, 0, i);
+            }
+            Console.WriteLine(otg);
+        }
+    }
+}
+//2 1 1 1 1 1 1 1 1 2 4 6 8 3 2 7 5
